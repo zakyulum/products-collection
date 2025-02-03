@@ -147,18 +147,27 @@
 
         .product-link {
             display: block;
-            background-color: #EE4D2D;
+            background: #EE4D2D;
             color: white;
             padding: 8px;
             text-decoration: none;
             border-radius: 5px;
             font-size: 14px;
-            transition: background-color 0.2s ease;
+            transition: all 0.2s ease;
             margin-top: auto;
+            border: none;
+            cursor: pointer;
         }
 
         .product-link:hover {
-            background-color: #EC4121;
+            background: #EE4D2D;
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .product-link:active,
+        .product-link:focus {
+            background: #EE4D2D;
         }
 
         @media (max-width: 600px) {
