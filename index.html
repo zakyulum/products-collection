@@ -25,6 +25,7 @@
             font-family: Arial, sans-serif;
             background: #f0f0f0;
             padding: 10px;
+            padding-top: 70px;
             min-height: 100vh;
         }
 
@@ -90,7 +91,7 @@
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 15px;
             padding: 10px;
-            margin-top: 15px;
+            margin-top: 0;
         }
 
         .product {
@@ -161,10 +162,14 @@
         }
 
         @media (max-width: 600px) {
+            body {
+                padding-top: 60px;
+            }
+            
             .products {
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
                 gap: 10px;
-                margin-top: 15px;
+                margin-top: 0;
                 padding: 15px;
             }
 
@@ -212,6 +217,10 @@
         }
 
         @media (max-width: 360px) {
+            body {
+                padding-top: 55px;
+            }
+            
             .site-name {
                 font-size: 18px;
                 padding-left: 10px;
@@ -224,7 +233,7 @@
             .products {
                 grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
                 padding: 10px;
-                margin-top: 15px;
+                margin-top: 0;
             }
 
             .search-box {
