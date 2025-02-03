@@ -352,15 +352,9 @@
             }
         }
 
-        // Tambahkan auto-refresh setiap 5 detik
-        function startAutoRefresh() {
-            setInterval(loadData, 5000); // Refresh setiap 5 detik
-        }
-
         // Update inisialisasi
         document.addEventListener('DOMContentLoaded', () => {
             loadData();
-            startAutoRefresh();
         });
     </script>
 </body>
