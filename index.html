@@ -307,7 +307,7 @@
         // Load data sekali saja
         async function loadData() {
             try {
-                const response = await fetch('data/config.json', {
+                const response = await fetch('data/config.json?t=' + new Date().getTime(), {
                     cache: 'no-store',
                     headers: {
                         'Cache-Control': 'no-cache',
@@ -318,6 +318,8 @@
                 
                 // Update nama situs
                 document.querySelector('.site-name').textContent = data.siteName;
+                // Update title juga
+                document.title = data.siteName;
                 
                 // Update data produk
                 window.productData = data.products;

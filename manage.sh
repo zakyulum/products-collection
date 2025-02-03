@@ -51,6 +51,24 @@ with open('$CONFIG_FILE', 'w') as f:
     json.dump(data, f, indent=4)
 "
     echo -e "${GREEN}Nama halaman berhasil diubah menjadi: $new_name${NC}"
+    
+    # Update cache-busting parameter di index.html
+    python -c "
+import re
+with open('index.html', 'r') as f:
+    content = f.read()
+# Update fetch URL dengan timestamp
+content = re.sub(
+    r'fetch\(\'data/config.json[^\']*\'',
+    f'fetch(\'data/config.json?t={new_name}\'',
+    content
++)
+with open('index.html', 'w') as f:
+    f.write(content)
+"
+    
+    # Force refresh browser dengan clear cache
+    echo -e "${YELLOW}Silakan clear cache browser atau hard refresh (Ctrl+F5) untuk melihat perubahan${NC}"
 }
 
 # Fungsi untuk menambah produk
