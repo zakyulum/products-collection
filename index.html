@@ -15,15 +15,17 @@
             font-family: Arial, sans-serif;
             background: #f0f0f0;
             padding: 10px;
+            min-height: 100vh;
         }
 
         .search-box {
-            position: sticky;
+            position: fixed;
             top: 0;
+            left: 0;
+            right: 0;
             background: white;
             padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 10px;
+            z-index: 1000;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
@@ -36,6 +38,7 @@
             border: 1px solid #ddd;
             border-radius: 25px;
             font-size: 16px;
+            outline: none;
         }
 
         .products {
@@ -43,6 +46,7 @@
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 15px;
             padding: 10px;
+            margin-top: 70px;
         }
 
         .product {
@@ -51,14 +55,20 @@
             padding: 15px;
             text-align: center;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .product:hover {
+            transform: translateY(-5px);
         }
 
         .product img {
             width: 100%;
             height: 200px;
-            object-fit: cover;
+            object-fit: contain;
             border-radius: 8px;
             margin-bottom: 10px;
+            background: #f8f8f8;
         }
 
         .product-id {
@@ -71,6 +81,7 @@
             font-size: 16px;
             margin: 10px 0;
             color: #333;
+            line-height: 1.4;
         }
 
         .product-link {
@@ -81,15 +92,26 @@
             text-decoration: none;
             border-radius: 5px;
             margin-top: 10px;
+            transition: background 0.2s ease;
+        }
+
+        .product-link:hover {
+            background: #45a049;
         }
 
         @media (max-width: 600px) {
             .products {
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 10px;
+                margin-top: 60px;
             }
 
             .product img {
                 height: 150px;
+            }
+
+            .search-box {
+                padding: 10px;
             }
         }
     </style>
@@ -98,7 +120,9 @@
     <div class="search-box">
         <input type="number" 
                placeholder="Cari nomor produk (contoh: 001)" 
-               onkeyup="filterProducts(this.value)">
+               onkeyup="filterProducts(this.value)"
+               inputmode="numeric"
+               pattern="[0-9]*">
     </div>
 
     <div class="products" id="productList"></div>
@@ -115,13 +139,14 @@
             // Tambah produk baru di sini
         ];
 
-        // Tampilkan Produk
+        // Tampilkan Produk dengan Lazy Loading
         function showProducts() {
             const container = document.getElementById('productList');
-            container.innerHTML = productData.map(product => `
+            const productHTML = productData.map(product => `
                 <div class="product" data-id="${product.id}">
                     <img src="${product.image}" 
                          alt="${product.name}"
+                         loading="lazy"
                          onerror="this.src='https://via.placeholder.com/300x300?text=Tidak+Tersedia'">
                     <div class="product-id">Produk #${product.id}</div>
                     <div class="product-name">${product.name}</div>
@@ -130,22 +155,28 @@
                     </a>
                 </div>
             `).join('');
+            
+            container.innerHTML = productHTML;
         }
 
-        // Filter Produk
+        // Filter Produk dengan Debounce
+        let timeoutId;
         function filterProducts(query) {
-            const products = document.getElementsByClassName('product');
-            const searchQuery = query.padStart(3, '0');
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                const products = document.getElementsByClassName('product');
+                const searchQuery = query.padStart(3, '0');
 
-            Array.from(products).forEach(product => {
-                const id = product.dataset.id;
-                product.style.display = 
-                    searchQuery === '' || id.includes(searchQuery) ? 'block' : 'none';
-            });
+                Array.from(products).forEach(product => {
+                    const id = product.dataset.id;
+                    product.style.display = 
+                        searchQuery === '' || id.includes(searchQuery) ? 'block' : 'none';
+                });
+            }, 300);
         }
 
-        // Inisialisasi
-        showProducts();
+        // Inisialisasi saat DOM sudah siap
+        document.addEventListener('DOMContentLoaded', showProducts);
     </script>
 </body>
 </html> 
