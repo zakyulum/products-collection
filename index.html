@@ -147,7 +147,7 @@
             {
                 number: "001",
                 name: "Link Produk 001",
-                image: "https://down-id.img.susercontent.com/file/id-11134207-7qul7-lj1b0lrjvtqz4f", // Gambar dari produk Shopee
+                image: "https://cf.shopee.co.id/file/id-11134207-7qul7-lj1b0lrjvtqz4f", // Mengubah format URL gambar
                 link: "https://s.shopee.co.id/7KhqIg7S3q"
             },
             {
@@ -162,12 +162,15 @@
         // Fungsi untuk menampilkan produk
         function displayProducts() {
             const productGrid = document.getElementById('productGrid');
-            productGrid.innerHTML = ''; // Bersihkan grid
+            productGrid.innerHTML = '';
 
             products.forEach(product => {
                 const productCard = `
                     <div class="product-card" data-number="${product.number}">
-                        <img src="${product.image}" alt="Produk ${product.number}" class="product-image">
+                        <img src="${product.image}" 
+                             alt="Produk ${product.number}" 
+                             class="product-image"
+                             onerror="this.src='https://via.placeholder.com/300x300?text=Gambar+Tidak+Tersedia'">
                         <p class="product-number">Produk #${product.number}</p>
                         <h2 class="product-title">${product.name}</h2>
                         <a href="${product.link}" class="product-link" target="_blank">Lihat Produk</a>
