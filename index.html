@@ -138,19 +138,49 @@
     </div>
 
     <div class="product-grid" id="productGrid">
-        <!-- Contoh Produk -->
-        <div class="product-card" data-number="001">
-            <img src="URL_GAMBAR_DARI_LINK_AFILIASI" alt="Produk 001" class="product-image">
-            <p class="product-number">Produk #001</p>
-            <h2 class="product-title">Nama Custom Produk</h2>
-            <a href="LINK_AFILIASI_ANDA" class="product-link" target="_blank">Lihat Produk</a>
-        </div>
+        <!-- Produk akan di-generate oleh JavaScript -->
     </div>
 
     <script>
+        // Data produk - Tambahkan produk baru di sini
+        const products = [
+            {
+                number: "001",
+                name: "Link Produk 001",
+                image: "https://down-id.img.susercontent.com/file/id-11134207-7qul7-lj1b0lrjvtqz4f", // Gambar dari produk Shopee
+                link: "https://s.shopee.co.id/7KhqIg7S3q"
+            },
+            {
+                number: "002",
+                name: "Kalung Anjing Biru",
+                image: "https://contoh-gambar.jpg",
+                link: "https://link-afiliasi-anda.com/produk2"
+            },
+            // Tambahkan produk baru dengan format yang sama
+        ];
+
+        // Fungsi untuk menampilkan produk
+        function displayProducts() {
+            const productGrid = document.getElementById('productGrid');
+            productGrid.innerHTML = ''; // Bersihkan grid
+
+            products.forEach(product => {
+                const productCard = `
+                    <div class="product-card" data-number="${product.number}">
+                        <img src="${product.image}" alt="Produk ${product.number}" class="product-image">
+                        <p class="product-number">Produk #${product.number}</p>
+                        <h2 class="product-title">${product.name}</h2>
+                        <a href="${product.link}" class="product-link" target="_blank">Lihat Produk</a>
+                    </div>
+                `;
+                productGrid.innerHTML += productCard;
+            });
+        }
+
+        // Fungsi pencarian
         function searchProducts(query) {
             const products = document.querySelectorAll('.product-card');
-            const searchQuery = query.padStart(3, '0'); // Mengubah input menjadi format 001
+            const searchQuery = query.padStart(3, '0');
 
             products.forEach(product => {
                 const productNumber = product.getAttribute('data-number');
@@ -161,6 +191,9 @@
                 }
             });
         }
+
+        // Tampilkan produk saat halaman dimuat
+        displayProducts();
     </script>
 </body>
 </html> 
