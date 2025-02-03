@@ -336,10 +336,24 @@
             }, 300);
         }
 
-        // Inisialisasi
-        document.addEventListener('DOMContentLoaded', () => {
-            preloadImages();
+        // Ganti bagian data produk dengan:
+        async function loadData() {
+            const response = await fetch('data/config.json');
+            const data = await response.json();
+            
+            // Update nama situs
+            document.querySelector('.site-name').textContent = data.siteName;
+            
+            // Update data produk
+            window.productData = data.products;
+            
+            // Tampilkan produk
             showProducts();
+        }
+
+        // Update inisialisasi
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
         });
     </script>
 </body>
