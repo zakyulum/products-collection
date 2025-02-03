@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Katalog Produk</title>
+    <link rel="preload" as="image" href="https://down-id.img.susercontent.com/file/id-11134207-23030-u939olwq76nvc5@resize_w450_nl.webp">
+    <meta name="description" content="Katalog Produk Affiliate">
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    <link rel="dns-prefetch" href="https://down-id.img.susercontent.com">
     <style>
         * {
             margin: 0;
@@ -70,8 +74,9 @@
             border-radius: 8px;
             margin-bottom: 10px;
             background: #f8f8f8;
-            opacity: 0;
             transition: opacity 0.3s ease;
+            will-change: opacity;
+            backface-visibility: hidden;
         }
 
         .product img.loaded {
@@ -146,6 +151,20 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        .product-placeholder {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            width: 100%;
+            height: 200px;
+            border-radius: 8px;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
     </style>
 </head>
 <body>
@@ -197,17 +216,20 @@
             }
         ];
 
+        function preloadImages() {
+            productData.forEach(product => {
+                const img = new Image();
+                img.src = product.image;
+            });
+        }
+
         function showProducts() {
             const container = document.getElementById('productList');
             
+            // Tampilkan placeholder terlebih dahulu
             container.innerHTML = productData.map(product => `
                 <div class="product" data-id="${product.id}">
-                    ${createLoadingSpinner()}
-                    <img src="${product.image}" 
-                         alt="${product.name}"
-                         style="display: none"
-                         onload="handleImageLoad(this)"
-                         onerror="handleImageError(this)">
+                    <div class="product-placeholder"></div>
                     <div class="product-id">Produk #${product.id}</div>
                     <div class="product-name">${product.name}</div>
                     <a href="${product.link}" class="product-link" target="_blank">
@@ -215,21 +237,24 @@
                     </a>
                 </div>
             `).join('');
-        }
 
-        function handleImageLoad(img) {
-            const loadingContainer = img.previousElementSibling;
-            loadingContainer.style.display = 'none';
-            img.style.display = 'block';
-            setTimeout(() => img.classList.add('loaded'), 50);
-        }
-
-        function handleImageError(img) {
-            const loadingContainer = img.previousElementSibling;
-            loadingContainer.style.display = 'none';
-            img.style.display = 'block';
-            img.src = 'https://via.placeholder.com/300x300?text=Gambar+Tidak+Tersedia';
-            img.classList.add('loaded');
+            // Load gambar setelah placeholder ditampilkan
+            setTimeout(() => {
+                const products = document.querySelectorAll('.product');
+                products.forEach((product, index) => {
+                    const placeholder = product.querySelector('.product-placeholder');
+                    const img = document.createElement('img');
+                    img.src = productData[index].image;
+                    img.alt = productData[index].name;
+                    img.onload = () => {
+                        placeholder.replaceWith(img);
+                    };
+                    img.onerror = () => {
+                        img.src = 'https://via.placeholder.com/300x300?text=Gambar+Tidak+Tersedia';
+                        placeholder.replaceWith(img);
+                    };
+                });
+            }, 100);
         }
 
         // Filter Produk dengan Debounce
@@ -248,8 +273,11 @@
             }, 300);
         }
 
-        // Inisialisasi saat DOM sudah siap
-        document.addEventListener('DOMContentLoaded', showProducts);
+        // Inisialisasi
+        document.addEventListener('DOMContentLoaded', () => {
+            preloadImages();
+            showProducts();
+        });
     </script>
 </body>
 </html> 
