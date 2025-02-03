@@ -160,15 +160,14 @@
     <div class="products" id="productList"></div>
 
     <script>
-        // Data Produk
+        // Data Produk - Cukup masukkan id, nama, dan link
         const productData = [
             {
                 id: "001",
                 name: "Link Produk 001",
-                image: "https://down-id.img.susercontent.com/file/id-11134207-7qul7-lj1b0lrjvtqz4f",
                 link: "https://s.shopee.co.id/7KhqIg7S3q"
             }
-            // Tambah produk baru di sini
+            // Tambah produk baru dengan format yang sama
         ];
 
         function createLoadingSpinner() {
@@ -179,12 +178,26 @@
             `;
         }
 
+        // Fungsi untuk mengekstrak ID gambar dari link Shopee
+        function getShopeeImageUrl(shopeeLink) {
+            // Mengambil ID gambar dari metadata Shopee
+            return fetch(shopeeLink)
+                .then(response => response.text())
+                .then(html => {
+                    const metaTag = html.match(/<meta property="og:image" content="([^"]+)"/);
+                    return metaTag ? metaTag[1] : null;
+                })
+                .catch(() => null);
+        }
+
         function showProducts() {
             const container = document.getElementById('productList');
+            
+            // Tampilkan loading untuk semua produk
             container.innerHTML = productData.map(product => `
                 <div class="product" data-id="${product.id}">
                     ${createLoadingSpinner()}
-                    <img src="${product.image}" 
+                    <img src="" 
                          alt="${product.name}"
                          style="display: none"
                          onload="handleImageLoad(this)"
@@ -197,14 +210,21 @@
                 </div>
             `).join('');
 
-            // Mulai memuat gambar
-            preloadImages();
-        }
-
-        function preloadImages() {
-            productData.forEach(product => {
-                const img = new Image();
-                img.src = product.image;
+            // Ambil gambar untuk setiap produk
+            productData.forEach((product, index) => {
+                const productElement = document.querySelectorAll('.product')[index];
+                const imgElement = productElement.querySelector('img');
+                
+                // Coba dapatkan gambar dari link Shopee
+                getShopeeImageUrl(product.link)
+                    .then(imageUrl => {
+                        if (imageUrl) {
+                            imgElement.src = imageUrl;
+                        } else {
+                            handleImageError(imgElement);
+                        }
+                    })
+                    .catch(() => handleImageError(imgElement));
             });
         }
 
