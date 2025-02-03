@@ -240,14 +240,7 @@
     <div class="products" id="productList"></div>
 
     <script>
-        function createLoadingSpinner() {
-            return `
-                <div class="loading-container">
-                    <div class="loading-spinner"></div>
-                </div>
-            `;
-        }
-
+        // Fungsi untuk menampilkan produk
         function showProducts() {
             const container = document.getElementById('productList');
             
@@ -259,7 +252,9 @@
             container.innerHTML = window.productData.map(product => `
                 <div class="product" data-id="${product.id}">
                     <div class="product-image-container">
-                        <div class="product-placeholder"></div>
+                        <img src="${product.image}" 
+                             alt="${product.name}"
+                             onerror="this.src='https://via.placeholder.com/300x300?text=Gambar+Tidak+Tersedia'">
                     </div>
                     <div class="product-name">${product.name}</div>
                     <a href="${product.link}" class="product-link" target="_blank">
@@ -267,45 +262,21 @@
                     </a>
                 </div>
             `).join('');
-
-            setTimeout(() => {
-                const products = document.querySelectorAll('.product');
-                products.forEach((product, index) => {
-                    const container = product.querySelector('.product-image-container');
-                    const placeholder = container.querySelector('.product-placeholder');
-                    const img = document.createElement('img');
-                    img.src = window.productData[index].image;
-                    img.alt = window.productData[index].name;
-                    img.onload = () => {
-                        placeholder.remove();
-                        container.appendChild(img);
-                    };
-                    img.onerror = () => {
-                        img.src = 'https://via.placeholder.com/300x300?text=Gambar+Tidak+Tersedia';
-                        placeholder.remove();
-                        container.appendChild(img);
-                    };
-                });
-            }, 100);
         }
 
-        // Filter Produk dengan Debounce
-        let timeoutId;
+        // Filter Produk
         function filterProducts(query) {
-            clearTimeout(timeoutId);
-            timeoutId = setTimeout(() => {
-                const products = document.getElementsByClassName('product');
-                const searchQuery = query.padStart(3, '0');
+            const products = document.getElementsByClassName('product');
+            const searchQuery = query.padStart(3, '0');
 
-                Array.from(products).forEach(product => {
-                    const id = product.dataset.id;
-                    product.style.display = 
-                        searchQuery === '' || id.includes(searchQuery) ? 'block' : 'none';
-                });
-            }, 300);
+            Array.from(products).forEach(product => {
+                const id = product.dataset.id;
+                product.style.display = 
+                    searchQuery === '' || id.includes(searchQuery) ? 'block' : 'none';
+            });
         }
 
-        // Update fungsi loadData untuk debugging
+        // Load data sekali saja
         async function loadData() {
             try {
                 const response = await fetch('data/config.json');
@@ -324,7 +295,7 @@
             }
         }
 
-        // Inisialisasi sederhana
+        // Load data hanya sekali saat halaman dimuat
         document.addEventListener('DOMContentLoaded', loadData);
     </script>
 </body>
