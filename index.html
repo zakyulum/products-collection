@@ -187,36 +187,34 @@
             };
         }
 
+        // Update data produk dengan informasi baru
         const productData = [
             {
                 id: "001",
                 name: "Link Produk 001",
-                link: "https://shopee.co.id/product/344882859/7676153036"
+                image: "https://down-id.img.susercontent.com/file/id-11134207-23030-u939olwq76nvc5@resize_w450_nl.webp",
+                link: "https://s.shopee.co.id/7KhqIg7S3q"
             }
         ];
 
         function showProducts() {
             const container = document.getElementById('productList');
             
-            container.innerHTML = productData.map(product => {
-                const productInfo = getShopeeProductInfo(product.link);
-                
-                return `
-                    <div class="product" data-id="${product.id}">
-                        ${createLoadingSpinner()}
-                        <img src="${productInfo.imageUrls[0]}" 
-                             alt="${product.name}"
-                             style="display: none"
-                             onload="handleImageLoad(this)"
-                             onerror="tryNextImage(this, ${JSON.stringify(productInfo.imageUrls)}, 0)">
-                        <div class="product-id">Produk #${product.id}</div>
-                        <div class="product-name">${product.name}</div>
-                        <a href="${product.link}" class="product-link" target="_blank">
-                            Lihat Produk
-                        </a>
-                    </div>
-                `;
-            }).join('');
+            container.innerHTML = productData.map(product => `
+                <div class="product" data-id="${product.id}">
+                    ${createLoadingSpinner()}
+                    <img src="${product.image}" 
+                         alt="${product.name}"
+                         style="display: none"
+                         onload="handleImageLoad(this)"
+                         onerror="handleImageError(this)">
+                    <div class="product-id">Produk #${product.id}</div>
+                    <div class="product-name">${product.name}</div>
+                    <a href="${product.link}" class="product-link" target="_blank">
+                        Lihat Produk
+                    </a>
+                </div>
+            `).join('');
         }
 
         function handleImageLoad(img) {
@@ -232,17 +230,6 @@
             img.style.display = 'block';
             img.src = 'https://via.placeholder.com/300x300?text=Gambar+Tidak+Tersedia';
             img.classList.add('loaded');
-        }
-
-        // Tambahkan fungsi untuk mencoba URL gambar berikutnya
-        function tryNextImage(img, urls, currentIndex) {
-            const nextIndex = currentIndex + 1;
-            if (nextIndex < urls.length) {
-                img.src = urls[nextIndex];
-                img.onerror = () => tryNextImage(img, urls, nextIndex);
-            } else {
-                handleImageError(img);
-            }
         }
 
         // Filter Produk dengan Debounce
