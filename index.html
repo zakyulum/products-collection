@@ -248,32 +248,6 @@
             `;
         }
 
-        function getShopeeProductInfo(link) {
-            // Extract product ID dan shop ID dari URL
-            const parts = link.split('/product/')[1].split('?')[0].split('/');
-            const shopId = parts[0];
-            const productId = parts[1];
-            
-            return {
-                shopId,
-                productId,
-                // Mencoba beberapa format URL gambar yang berbeda
-                imageUrls: [
-                    `https://down-id.img.susercontent.com/file/sg-11134201-${productId}`,
-                    `https://down-id.img.susercontent.com/file/${shopId}_tn`,
-                    `https://cf.shopee.co.id/file/${shopId}`,
-                    `https://cf.shopee.co.id/file/sg-11134201-${productId}_tn`
-                ]
-            };
-        }
-
-        function preloadImages() {
-            productData.forEach(product => {
-                const img = new Image();
-                img.src = product.image;
-            });
-        }
-
         function showProducts() {
             const container = document.getElementById('productList');
             
