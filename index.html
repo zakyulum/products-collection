@@ -11,6 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -54,20 +55,31 @@
         .search-container {
             flex: 1;
             max-width: 300px;
+            position: relative;
         }
 
         .search-box input {
             width: 100%;
-            padding: 12px 20px;
+            padding: 12px 20px 12px 45px;
             border: 2px solid #e0e0e0;
             border-radius: 25px;
             font-size: 15px;
             outline: none;
             transition: border-color 0.3s ease;
+            -moz-appearance: textfield;
         }
 
         .search-box input:focus {
             border-color: #2196F3;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            pointer-events: none;
         }
 
         .products {
@@ -203,12 +215,20 @@
             0% { background-position: 200% 0; }
             100% { background-position: -200% 0; }
         }
+
+        /* Hilangkan arrow di Chrome, Safari, Edge, Opera */
+        .search-box input::-webkit-outer-spin-button,
+        .search-box input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
     </style>
 </head>
 <body>
     <div class="search-box">
         <div class="site-name">belimurah</div>
         <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
             <input type="number" 
                    placeholder="Nomor Produk" 
                    onkeyup="filterProducts(this.value)"
