@@ -6,6 +6,12 @@
             "name": "Link Produk 001",
             "image": "https://down-id.img.susercontent.com/file/id-11134207-23030-u939olwq76nvc5@resize_w450_nl.webp",
             "link": "https://s.shopee.co.id/7KhqIg7S3q"
+        },
+        {
+            "id": "002",
+            "name": "Link Produk 002",
+            "image": "https://down-id.img.susercontent.com/file/sg-11134201-23010-597c0us3hvlv02.webp",
+            "link": "https://s.shopee.co.id/3VV7s5H1e7"
         }
     ]
-} 
+}
