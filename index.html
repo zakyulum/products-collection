@@ -8,6 +8,9 @@
     <meta name="description" content="Katalog Produk Affiliate">
     <meta http-equiv="x-dns-prefetch-control" content="on">
     <link rel="dns-prefetch" href="https://down-id.img.susercontent.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -28,7 +31,7 @@
             left: 0;
             right: 0;
             background: white;
-            padding: 15px;
+            padding: 20px;
             z-index: 1000;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             display: flex;
@@ -38,25 +41,33 @@
         }
 
         .site-name {
-            font-size: 20px;
-            font-weight: bold;
-            color: #333;
+            font-family: 'Righteous', cursive;
+            font-size: 28px;
+            color: #2196F3;
             white-space: nowrap;
-            padding-left: 15px;
+            padding-left: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
         }
 
         .search-container {
             flex: 1;
-            max-width: 400px;
+            max-width: 300px;
         }
 
         .search-box input {
             width: 100%;
-            padding: 10px 15px;
-            border: 1px solid #ddd;
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
             border-radius: 25px;
-            font-size: 16px;
+            font-size: 15px;
             outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-box input:focus {
+            border-color: #2196F3;
         }
 
         .products {
@@ -146,8 +157,8 @@
             }
 
             .site-name {
-                font-size: 18px;
-                padding-left: 10px;
+                font-size: 24px;
+                padding-left: 15px;
             }
         }
 
@@ -199,7 +210,7 @@
         <div class="site-name">belimurah</div>
         <div class="search-container">
             <input type="number" 
-                   placeholder="Cari nomor produk (contoh: 001)" 
+                   placeholder="Nomor Produk" 
                    onkeyup="filterProducts(this.value)"
                    inputmode="numeric"
                    pattern="[0-9]*">
