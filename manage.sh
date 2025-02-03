@@ -220,6 +220,11 @@ push_to_github() {
         
         if git push -u origin main; then
             echo -e "${GREEN}✓ Berhasil push ke GitHub!${NC}"
+            echo -e "${YELLOW}Silakan refresh browser untuk melihat perubahan${NC}"
+            
+            # Tunggu konfirmasi dari user
+            echo -n "Tekan Enter setelah me-refresh browser..."
+            read
         else
             echo -e "${RED}✗ Gagal push ke GitHub${NC}"
         fi
