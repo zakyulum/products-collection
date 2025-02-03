@@ -133,28 +133,34 @@
             {
                 id: "001",
                 name: "Link Produk 001",
-                image: "https://cf.shopee.co.id/file/id-11134207-7qul7-lj1b0lrjvtqz4f",
+                image: "https://down-id.img.susercontent.com/file/id-11134207-7qul7-lj1b0lrjvtqz4f",
                 link: "https://s.shopee.co.id/7KhqIg7S3q"
             }
             // Tambah produk baru di sini
         ];
 
-        // Tampilkan Produk dengan Lazy Loading
+        // Tampilkan Produk dengan Lazy Loading dan Preload Image
         function showProducts() {
             const container = document.getElementById('productList');
-            const productHTML = productData.map(product => `
-                <div class="product" data-id="${product.id}">
-                    <img src="${product.image}" 
-                         alt="${product.name}"
-                         loading="lazy"
-                         onerror="this.src='https://via.placeholder.com/300x300?text=Tidak+Tersedia'">
-                    <div class="product-id">Produk #${product.id}</div>
-                    <div class="product-name">${product.name}</div>
-                    <a href="${product.link}" class="product-link" target="_blank">
-                        Lihat Produk
-                    </a>
-                </div>
-            `).join('');
+            const productHTML = productData.map(product => {
+                // Pre-load gambar
+                const img = new Image();
+                img.src = product.image;
+                
+                return `
+                    <div class="product" data-id="${product.id}">
+                        <img src="${product.image}" 
+                             alt="${product.name}"
+                             loading="eager"
+                             onerror="this.src='https://via.placeholder.com/300x300?text=Memuat+Gambar'">
+                        <div class="product-id">Produk #${product.id}</div>
+                        <div class="product-name">${product.name}</div>
+                        <a href="${product.link}" class="product-link" target="_blank">
+                            Lihat Produk
+                        </a>
+                    </div>
+                `;
+            }).join('');
             
             container.innerHTML = productHTML;
         }
