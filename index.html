@@ -336,24 +336,34 @@
             }, 300);
         }
 
-        // Ganti bagian data produk dengan:
+        // Update fungsi loadData untuk auto-refresh
         async function loadData() {
-            const response = await fetch('data/config.json');
-            const data = await response.json();
-            
-            // Update nama situs
-            document.querySelector('.site-name').textContent = data.siteName;
-            
-            // Update data produk
-            window.productData = data.products;
-            
-            // Tampilkan produk
-            showProducts();
+            try {
+                const response = await fetch('data/config.json?' + new Date().getTime()); // Tambahkan timestamp untuk mencegah cache
+                const data = await response.json();
+                
+                // Update nama situs
+                document.querySelector('.site-name').textContent = data.siteName;
+                
+                // Update data produk
+                window.productData = data.products;
+                
+                // Tampilkan produk
+                showProducts();
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        }
+
+        // Tambahkan auto-refresh setiap 5 detik
+        function startAutoRefresh() {
+            setInterval(loadData, 5000); // Refresh setiap 5 detik
         }
 
         // Update inisialisasi
         document.addEventListener('DOMContentLoaded', () => {
             loadData();
+            startAutoRefresh();
         });
     </script>
 </body>
