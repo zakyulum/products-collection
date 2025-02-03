@@ -160,14 +160,13 @@
     <div class="products" id="productList"></div>
 
     <script>
-        // Data Produk - Cukup masukkan id, nama, dan link
+        // Data Produk - Cukup masukkan nomor, nama dan link
         const productData = [
             {
                 id: "001",
                 name: "Link Produk 001",
                 link: "https://s.shopee.co.id/7KhqIg7S3q"
             }
-            // Tambah produk baru dengan format yang sama
         ];
 
         function createLoadingSpinner() {
@@ -178,54 +177,40 @@
             `;
         }
 
-        // Fungsi untuk mengekstrak ID gambar dari link Shopee
-        function getShopeeImageUrl(shopeeLink) {
-            // Mengambil ID gambar dari metadata Shopee
-            return fetch(shopeeLink)
-                .then(response => response.text())
-                .then(html => {
-                    const metaTag = html.match(/<meta property="og:image" content="([^"]+)"/);
-                    return metaTag ? metaTag[1] : null;
-                })
-                .catch(() => null);
+        function getShopeeImage(link) {
+            // Ambil ID produk dari link
+            const productId = link.split('/').pop();
+            // Coba beberapa format URL gambar Shopee
+            return [
+                `https://cf.shopee.co.id/file/sg-11134201-${productId}`,
+                `https://cf.shopee.co.id/file/id-11134201-${productId}`,
+                `https://down-id.img.susercontent.com/file/${productId}`
+            ];
         }
 
         function showProducts() {
             const container = document.getElementById('productList');
             
-            // Tampilkan loading untuk semua produk
-            container.innerHTML = productData.map(product => `
-                <div class="product" data-id="${product.id}">
-                    ${createLoadingSpinner()}
-                    <img src="" 
-                         alt="${product.name}"
-                         style="display: none"
-                         onload="handleImageLoad(this)"
-                         onerror="handleImageError(this)">
-                    <div class="product-id">Produk #${product.id}</div>
-                    <div class="product-name">${product.name}</div>
-                    <a href="${product.link}" class="product-link" target="_blank">
-                        Lihat Produk
-                    </a>
-                </div>
-            `).join('');
-
-            // Ambil gambar untuk setiap produk
-            productData.forEach((product, index) => {
-                const productElement = document.querySelectorAll('.product')[index];
-                const imgElement = productElement.querySelector('img');
+            container.innerHTML = productData.map(product => {
+                const imageUrls = getShopeeImage(product.link);
                 
-                // Coba dapatkan gambar dari link Shopee
-                getShopeeImageUrl(product.link)
-                    .then(imageUrl => {
-                        if (imageUrl) {
-                            imgElement.src = imageUrl;
-                        } else {
-                            handleImageError(imgElement);
-                        }
-                    })
-                    .catch(() => handleImageError(imgElement));
-            });
+                return `
+                    <div class="product" data-id="${product.id}">
+                        ${createLoadingSpinner()}
+                        <img src="${imageUrls[0]}" 
+                             alt="${product.name}"
+                             style="display: none"
+                             onload="handleImageLoad(this)"
+                             onerror="tryNextImage(this, ${JSON.stringify(imageUrls)}, 0)"
+                             data-urls='${JSON.stringify(imageUrls)}'>
+                        <div class="product-id">Produk #${product.id}</div>
+                        <div class="product-name">${product.name}</div>
+                        <a href="${product.link}" class="product-link" target="_blank">
+                            Lihat Produk
+                        </a>
+                    </div>
+                `;
+            }).join('');
         }
 
         function handleImageLoad(img) {
@@ -233,6 +218,16 @@
             loadingContainer.style.display = 'none';
             img.style.display = 'block';
             setTimeout(() => img.classList.add('loaded'), 50);
+        }
+
+        function tryNextImage(img, urls, currentIndex) {
+            const nextIndex = currentIndex + 1;
+            if (nextIndex < urls.length) {
+                img.src = urls[nextIndex];
+                img.onerror = () => tryNextImage(img, urls, nextIndex);
+            } else {
+                handleImageError(img);
+            }
         }
 
         function handleImageError(img) {
