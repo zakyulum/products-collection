@@ -31,13 +31,27 @@
             padding: 15px;
             z-index: 1000;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .site-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            white-space: nowrap;
+            padding-left: 15px;
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 400px;
         }
 
         .search-box input {
             width: 100%;
-            max-width: 400px;
-            display: block;
-            margin: 0 auto;
             padding: 10px 15px;
             border: 1px solid #ddd;
             border-radius: 25px;
@@ -131,8 +145,9 @@
                 height: 100%;
             }
 
-            .search-box {
-                padding: 10px;
+            .site-name {
+                font-size: 18px;
+                padding-left: 10px;
             }
         }
 
@@ -181,11 +196,14 @@
 </head>
 <body>
     <div class="search-box">
+        <div class="site-name">belimurah</div>
+        <div class="search-container">
             <input type="number" 
-               placeholder="Cari nomor produk (contoh: 001)" 
-               onkeyup="filterProducts(this.value)"
+                   placeholder="Cari nomor produk (contoh: 001)" 
+                   onkeyup="filterProducts(this.value)"
                    inputmode="numeric"
-               pattern="[0-9]*">
+                   pattern="[0-9]*">
+        </div>
     </div>
 
     <div class="products" id="productList"></div>
