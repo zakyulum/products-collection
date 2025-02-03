@@ -267,16 +267,6 @@
             };
         }
 
-        // Update data produk dengan informasi baru
-        const productData = [
-            {
-                id: "001",
-                name: "Link Produk 001",
-                image: "https://down-id.img.susercontent.com/file/id-11134207-23030-u939olwq76nvc5@resize_w450_nl.webp",
-                link: "https://s.shopee.co.id/7KhqIg7S3q"
-            }
-        ];
-
         function preloadImages() {
             productData.forEach(product => {
                 const img = new Image();
@@ -287,7 +277,12 @@
         function showProducts() {
             const container = document.getElementById('productList');
             
-            container.innerHTML = productData.map(product => `
+            if (!window.productData || !window.productData.length) {
+                container.innerHTML = '<div class="no-products">Tidak ada produk</div>';
+                return;
+            }
+            
+            container.innerHTML = window.productData.map(product => `
                 <div class="product" data-id="${product.id}">
                     <div class="product-image-container">
                         <div class="product-placeholder"></div>
@@ -305,8 +300,8 @@
                     const container = product.querySelector('.product-image-container');
                     const placeholder = container.querySelector('.product-placeholder');
                     const img = document.createElement('img');
-                    img.src = productData[index].image;
-                    img.alt = productData[index].name;
+                    img.src = window.productData[index].image;
+                    img.alt = window.productData[index].name;
                     img.onload = () => {
                         placeholder.remove();
                         container.appendChild(img);
@@ -336,11 +331,13 @@
             }, 300);
         }
 
-        // Update fungsi loadData untuk auto-refresh
+        // Update fungsi loadData untuk debugging
         async function loadData() {
             try {
-                const response = await fetch('data/config.json?' + new Date().getTime()); // Tambahkan timestamp untuk mencegah cache
+                const response = await fetch('data/config.json?' + new Date().getTime());
                 const data = await response.json();
+                
+                console.log('Data loaded:', data); // Tambahkan log untuk debugging
                 
                 // Update nama situs
                 document.querySelector('.site-name').textContent = data.siteName;
