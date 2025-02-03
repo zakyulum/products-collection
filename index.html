@@ -334,10 +334,8 @@
         // Update fungsi loadData untuk debugging
         async function loadData() {
             try {
-                const response = await fetch('data/config.json?' + new Date().getTime());
+                const response = await fetch('data/config.json');
                 const data = await response.json();
-                
-                console.log('Data loaded:', data); // Tambahkan log untuk debugging
                 
                 // Update nama situs
                 document.querySelector('.site-name').textContent = data.siteName;
@@ -352,10 +350,8 @@
             }
         }
 
-        // Update inisialisasi
-        document.addEventListener('DOMContentLoaded', () => {
-            loadData();
-        });
+        // Inisialisasi sederhana
+        document.addEventListener('DOMContentLoaded', loadData);
     </script>
 </body>
 </html> 
