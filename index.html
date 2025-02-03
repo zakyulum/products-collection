@@ -60,7 +60,7 @@
 
         .search-box input {
             width: 100%;
-            padding: 12px 20px 12px 45px;
+            padding: 12px 45px 12px 20px;
             border: 2px solid #e0e0e0;
             border-radius: 25px;
             font-size: 15px;
@@ -75,7 +75,7 @@
 
         .search-icon {
             position: absolute;
-            left: 15px;
+            right: 15px;
             top: 50%;
             transform: translateY(-50%);
             color: #666;
@@ -228,12 +228,12 @@
     <div class="search-box">
         <div class="site-name">belimurah</div>
         <div class="search-container">
-            <i class="fas fa-search search-icon"></i>
             <input type="number" 
                    placeholder="Nomor Produk" 
                    onkeyup="filterProducts(this.value)"
                    inputmode="numeric"
                    pattern="[0-9]*">
+            <i class="fas fa-search search-icon"></i>
         </div>
     </div>
 
