@@ -1,0 +1,17 @@
+RewriteEngine On
+
+# Redirect semua request ke HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# API requests
+RewriteCond %{REQUEST_URI} ^/api/
+RewriteRule ^api/(.*)$ server.js [L]
+
+# Admin panel
+RewriteRule ^admin/?$ admin.html [L]
+
+# Fallback ke index.html
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . index.html [L] 
